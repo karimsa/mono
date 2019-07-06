@@ -14,13 +14,13 @@ fi
 
 function run_script() {
     script="$1"
+    enable_echo="$2"
 
-    if ! test -e "./package.json"; then
-        return
+    name=""
+    if test -e "package.json"; then
+        name="`cat package.json | jq -r .name`"
     fi
-
-    name="`cat package.json | jq -r .name`"
-    if test "$name" = "null"; then
+    if test -z "$name" || test "$name" = "null"; then
         name="`basename $PWD`"
     fi
 
@@ -49,7 +49,11 @@ function run_script() {
     echo -e "$cmd"
     disable_color
 
-    bash -c "$cmd"
+    if test "$enable_echo" = "true"; then
+        bash -c "$cmd" 2>&1 | sed "s:^:`tput setaf 4`[$name]`tput sgr0` :"
+    else
+        bash -c "$cmd"
+    fi
 }
 
 function enable_fg_color() {
@@ -87,26 +91,23 @@ fi
 if test "$command" = "start"; then
     children=""
 
+    function kill_children() {
+        echo "Stopping start processes: $children"
+        trap - SIGINT
+        kill -9 $children &>/dev/null || true
+    }
+    trap kill_children SIGINT
+
     run_script prestart
 
     for dir in `list_packages`; do
         cd "packages/$dir"
         run_script prestart
-
-        name=""
-        if test -e "package.json"; then
-            name="`cat package.json | jq -r .name`"
-        fi
-        if test "$name" = "null"; then
-            name="$dir"
-        fi
-
-        run_script start 2>&1 | sed "s:^:[$name] :" & children="$! $children"
+        run_script start true & children="$! $children"
         cd ../..
     done
 
     wait
-    kill -9 "$children" &>/dev/null || true
 elif test "$command" = "install" || test "$command" = "i" || test "$command" = "test" || test "$command" = "run"; then
     args=""
     if test "$command" = "run" || test "$command" = "test"; then
