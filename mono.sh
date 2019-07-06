@@ -90,7 +90,7 @@ if test "$command" = "start"; then
             name="$dir"
         fi
 
-        npm start 2>&1 | sed "s/^/[$name]: /" & children="$!"
+        npm start 2>&1 | sed "s:^:[$name] :" & children="$!"
         cd ../..
     done
 

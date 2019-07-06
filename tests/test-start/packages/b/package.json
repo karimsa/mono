@@ -1,4 +1,5 @@
 {
+    "name": "@a/b",
     "scripts": {
         "start": "echo hello from b"
     }
