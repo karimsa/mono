@@ -14,15 +14,15 @@ function printlog() {
     echo
 }
 
-if ! "$wd/../../mono.sh" "start" &> "$log"; then
+if ! "$wd/../../mono.sh" "start" | tr -d '[:cntrl:]' &> "$log"; then
     printlog
     print_err "Failed to run: mono start"
 fi
 
 if ! fgrep "[@a/a] hello from a" "$log" >/dev/null; then
     printlog
-    print_err "Expected to find '[a]: hello from a' in logfile"
+    print_err "Expected to find '[@a/a] hello from a' in logfile"
 elif ! fgrep "[@a/b] hello from b" "$log" >/dev/null; then
     printlog
-    print_err "Expected to find '[b]: hello from b' in logfile"
+    print_err "Expected to find '[@a/b] hello from b' in logfile"
 fi

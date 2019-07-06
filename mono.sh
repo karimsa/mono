@@ -15,6 +15,10 @@ fi
 function run_script() {
     script="$1"
 
+    if ! test -e "./package.json"; then
+        return
+    fi
+
     name="`cat package.json | jq -r .name`"
     if test "$name" = "null"; then
         name="`basename $PWD`"
@@ -80,21 +84,24 @@ if uname -a | grep Darwin &>/dev/null; then
     jq="$PWD/jq/macos"
 fi
 
-if ! test -e "./package.json"; then
-    echo "{}" > package.json
-fi
-
 if test "$command" = "start"; then
     children=""
 
+    run_script prestart
+
     for dir in `list_packages`; do
         cd "packages/$dir"
-        name="`cat package.json | jq -r .name`"
+        run_script prestart
+
+        name=""
+        if test -e "package.json"; then
+            name="`cat package.json | jq -r .name`"
+        fi
         if test "$name" = "null"; then
             name="$dir"
         fi
 
-        npm start 2>&1 | sed "s:^:[$name] :" & children="$!"
+        run_script start 2>&1 | sed "s:^:[$name] :" & children="$! $children"
         cd ../..
     done
 
