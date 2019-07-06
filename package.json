@@ -1,0 +1,17 @@
+{
+	"name": "@karimsa/mono",
+	"version": "0.0.0",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"test": "./scripts/run-tests.sh",
+		"watch:test": "nodemon -e sh -x npm run test"
+	},
+	"bin": {
+		"mono": "./mono.sh"
+	},
+	"devDependencies": {
+		"nodemon": "^1.19.1"
+	}
+}
