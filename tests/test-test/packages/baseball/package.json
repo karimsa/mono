@@ -1,0 +1,13 @@
+{
+    "scripts": {
+        "pretest": "touch pretest-ran",
+        "test": "touch test-ran",
+        "posttest": "touch posttest-ran"
+    },
+    "dependencies": {
+        "lodash": "*"
+    },
+    "devDependencies": {
+        "underscore": "*"
+    }
+}
