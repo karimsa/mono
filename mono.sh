@@ -56,6 +56,14 @@ function disable_color() {
     printf "\e[0m"
 }
 
+function list_packages() {
+    if test "`jq -r .mono.packages package.json`" = "null"; then
+        ls -1F packages | grep '/' | cut -d\/ -f1
+    else
+        jq -r '.mono.packages[]' package.json
+    fi
+}
+
 command="$1"
 if test -z "$command"; then
     command="install"
@@ -75,7 +83,7 @@ fi
 if test "$command" = "start"; then
     children=""
 
-    for dir in `ls -1F packages | grep '/' | cut -d\/ -f1`; do
+    for dir in `list_packages`; do
         cd "packages/$dir"
         name="`cat package.json | jq -r .name`"
         if test "$name" = "null"; then
@@ -120,7 +128,7 @@ elif test "$command" = "install" || test "$command" = "i" || test "$command" = "
         run_script "$command"
     fi
 
-    for dir in `ls -1F packages | grep '/' | cut -d\/ -f1`; do
+    for dir in `list_packages`; do
         cd "packages/$dir"
         
         run_script "pre$command"
