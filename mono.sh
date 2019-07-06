@@ -49,11 +49,15 @@ function run_script() {
 }
 
 function enable_fg_color() {
-    printf "\e[38;5;$1m"
+    if [ -t 1 ]; then
+        printf "\e[38;5;$1m"
+    fi
 }
 
 function disable_color() {
-    printf "\e[0m"
+    if [ -t 1 ]; then
+        printf "\e[0m"
+    fi
 }
 
 function list_packages() {
