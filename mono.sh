@@ -12,7 +12,11 @@ if ! test -e "packages"; then
     exit 1
 fi
 
-echo "Running `jq -r .name "$(dirname $0)/package.json"` v`jq -r .version "$(dirname $0)/package.json"`"
+pkgJsonLocation="`cd $(dirname $0) && pwd`/package.json"
+if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
+    pkgJsonLocation="`find $(dirname $pkgJsonLocation)/.. -name 'package.json'`"
+fi
+echo "Running @karimsa/mono v`jq -r .version "${pkgJsonLocation}"`"
 
 function run_script() {
     script="$1"
