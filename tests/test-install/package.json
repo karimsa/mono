@@ -1,12 +1,13 @@
 {
-    "scripts": {
-        "preinstall": "touch preinstall-ran",
-        "postinstall": "touch postinstall-ran"
-    },
-    "dependencies": {
-        "lodash": "*"
-    },
-    "devDependencies": {
-        "underscore": "*"
-    }
+  "scripts": {
+    "preinstall": "touch preinstall-ran",
+    "postinstall": "touch postinstall-ran"
+  },
+  "dependencies": {
+    "lodash": "*"
+  },
+  "devDependencies": {
+    "underscore": "*"
+  },
+  "name": ""
 }

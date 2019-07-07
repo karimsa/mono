@@ -26,15 +26,24 @@ function run_script() {
         return 0
     fi
 
-    if test "$name" = "null"; then
-        name="`basename $PWD`"
-    fi
-
     if test "$script" = "install"; then
         cmd="npm install"
+    elif test "$script" = "ci"; then
+        cmd="npm ci"
+
+        # Patch package.json because `npm ci` craps out
+        # if you don't
+        if test "$name" = "null"; then
+            jq '.name = ""' package.json > package.new.json
+            mv package.new.json package.json
+        fi
     fi
     if test "$cmd" = "null"; then
         return 0
+    fi
+
+    if test "$name" = "null"; then
+        name="`basename $PWD`"
     fi
 
     enable_fg_color "27"
