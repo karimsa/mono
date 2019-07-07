@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "test": "node -r @a/a -r @a/b -e 'process.exit()'"
+    }
+}

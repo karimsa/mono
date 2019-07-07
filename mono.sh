@@ -94,7 +94,7 @@ function disable_color() {
 }
 
 function list_packages() {
-    if test "`jq -r .mono.packages package.json`" = "null"; then
+    if ! test -e "package.json" || test "`jq -r .mono.packages package.json`" = "null"; then
         ls -1F packages | grep '/' | cut -d\/ -f1
     else
         jq -r '.mono.packages[]' package.json
