@@ -14,7 +14,7 @@ function printlog() {
     echo
 }
 
-if ! "$wd/../../mono.sh" "start" | tr -d '[:cntrl:]' &> "$log"; then
+if ! "$wd/../../mono.sh" "start" &> "$log"; then
     printlog
     print_err "Failed to run: mono start"
 fi
