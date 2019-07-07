@@ -19,6 +19,13 @@ function run_script() {
     name=""
     cmd=""
 
+    # Map hooks for `npm ci` to `npm install`
+    if test "$script" = "preci"; then
+        script="preinstall"
+    elif test "$script" = "postci"; then
+        script="postinstall"
+    fi
+
     if test -e "package.json"; then
         name="`cat package.json | jq -r .name`"
         cmd="`cat package.json | jq -r .scripts.$script`"
@@ -27,9 +34,9 @@ function run_script() {
     fi
 
     if test "$script" = "install"; then
-        cmd="npm install"
+        cmd="npm install --ignore-scripts --no-audit"
     elif test "$script" = "ci"; then
-        cmd="npm ci"
+        cmd="npm ci --ignore-scripts"
 
         # Patch package.json because `npm ci` craps out
         # if you don't
@@ -42,7 +49,7 @@ function run_script() {
         return 0
     fi
 
-    if test "$name" = "null"; then
+    if test "$name" = "null" || test -z "$name"; then
         name="`basename $PWD`"
     fi
 
