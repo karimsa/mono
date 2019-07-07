@@ -119,8 +119,15 @@ function create_pkg_links() {
                 cd "packages/$innerPkg"
 
                 echo "Linking: $outerPkgName into packages/$innerPkg/"
-                mkdir -p "node_modules/$outerPkg"
-                echo "module.exports = require('../../../$outerPkg')" > "node_modules/$outerPkg/index.js"
+                mkdir -p "node_modules/$outerPkgName"
+
+                if test "${outerPkgName:0:1}" = "@"; then
+                    # Scoped path: (scope parent) > node_modules > (inner src) > (packages)
+                    echo "module.exports = require('../../../../$outerPkg')" > "node_modules/$outerPkgName/index.js"
+                else
+                    # Non-scoped path: node_modules > (inner src) > (packages)
+                    echo "module.exports = require('../../../$outerPkg')" > "node_modules/$outerPkgName/index.js"
+                fi
 
                 cd ../..
             fi

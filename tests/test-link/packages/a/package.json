@@ -1,6 +1,6 @@
 {
     "name": "@a/a",
     "scripts": {
-        "test": "node -r @a/b -e 'process.exit()'"
+        "test": "node ."
     }
 }
