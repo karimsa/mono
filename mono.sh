@@ -76,6 +76,33 @@ function list_packages() {
     fi
 }
 
+function create_pkg_links() {
+    for outerPkg in `list_packages`; do
+        if ! test -e "packages/$outerPkg/package.json"; then
+            echo "Skipping linking '$outerPkg' - no package.json"
+            continue
+        fi
+
+        outerPkgName="`jq -r .name packages/$outerPkg/package.json`"
+        if test "$outerPkgName" = "null"; then
+            echo "Skipping linking '$outerPkg' - no name in package.json"
+            continue
+        fi
+
+        for innerPkg in `list_packages`; do
+            if test "$outerPkg" != "$innerPkg"; then
+                cd "packages/$innerPkg"
+
+                echo "Linking: $outerPkgName into packages/$innerPkg/"
+                mkdir -p "node_modules/$outerPkg"
+                echo "module.exports = require('../../../$outerPkg')" > "node_modules/$outerPkg/index.js"
+
+                cd ../..
+            fi
+        done
+    done
+}
+
 command="$1"
 if test -z "$command"; then
     command="install"
@@ -151,6 +178,12 @@ elif test "$command" = "install" || test "$command" = "i" || test "$command" = "
     done
 
     run_script "post$command"
+
+    if test "$command" = "install"; then
+        create_pkg_links
+    fi
+elif test "$command" = "link"; then
+    create_pkg_links
 else
     echo "Unknown command: $command"
     exit 1
