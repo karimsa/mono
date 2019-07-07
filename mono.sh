@@ -54,20 +54,25 @@ function run_script() {
     disable_color
 
     if test "$enable_echo" = "true"; then
-        bash -c "$cmd" 2>&1 | sed "s:^:`tput setaf 4`[$name]`tput sgr0` :"
+        istty="false"
+        if [ -t 1 ]; then
+            istty="true"
+        fi
+
+        bash -c "$cmd" 2>&1 | sed "s:^:`enable_fg_color 4 $istty`[$name]`disable_color $istty` :"
     else
         bash -c "$cmd"
     fi
 }
 
 function enable_fg_color() {
-    if [ -t 1 ]; then
+    if test "$2" = "true" || [ -t 1 ]; then
         printf "\e[38;5;$1m"
     fi
 }
 
 function disable_color() {
-    if [ -t 1 ]; then
+    if test "$1" = "true" || [ -t 1 ]; then
         printf "\e[0m"
     fi
 }
