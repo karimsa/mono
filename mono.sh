@@ -12,6 +12,8 @@ if ! test -e "packages"; then
     exit 1
 fi
 
+echo "Running `jq -r .name "$(dirname $0)/package.json"` v`jq -r .version "$(dirname $0)/package.json"`"
+
 function run_script() {
     script="$1"
     enable_echo="$2"
