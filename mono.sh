@@ -17,14 +17,18 @@ function run_script() {
     enable_echo="$2"
 
     name=""
+    cmd=""
+
     if test -e "package.json"; then
         name="`cat package.json | jq -r .name`"
-    fi
-    if test -z "$name" || test "$name" = "null"; then
-        name="`basename $PWD`"
+        cmd="`cat package.json | jq -r .scripts.$script`"
+    else
+        return
     fi
 
-    cmd="`cat package.json | jq -r .scripts.$script`"
+    if test "$name" = "null"; then
+        name="`basename $PWD`"
+    fi
 
     if test "$script" = "install"; then
         cmd="npm install"
