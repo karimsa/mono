@@ -140,7 +140,7 @@ if test "$command" = "start"; then
     done
 
     wait
-elif test "$command" = "install" || test "$command" = "i" || test "$command" = "test" || test "$command" = "run"; then
+elif test "$command" = "install" || test "$command" = "i" || test "$command" = "ci" || test "$command" = "test" || test "$command" = "run"; then
     args=""
     if test "$command" = "run" || test "$command" = "test"; then
         if test "$command" = "run" && test "$#" = "0"; then
