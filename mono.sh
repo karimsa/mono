@@ -104,8 +104,13 @@ function create_pkg_links() {
 }
 
 command="$1"
+
 if test -z "$command"; then
-    command="install"
+    if test -z "$CI"; then
+        command="install"
+    else
+        command="ci"
+    fi
 else
     shift
 fi
@@ -162,7 +167,7 @@ elif test "$command" = "install" || test "$command" = "i" || test "$command" = "
     fi
 
     run_script "pre$command"
-    
+
     if test "$command" != "test"; then
         run_script "$command"
     fi
