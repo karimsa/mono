@@ -23,7 +23,7 @@ function run_script() {
         name="`cat package.json | jq -r .name`"
         cmd="`cat package.json | jq -r .scripts.$script`"
     else
-        return
+        return 0
     fi
 
     if test "$name" = "null"; then
@@ -34,7 +34,7 @@ function run_script() {
         cmd="npm install"
     fi
     if test "$cmd" = "null"; then
-        return
+        return 0
     fi
 
     enable_fg_color "27"
@@ -130,9 +130,10 @@ if uname -a | grep Darwin &>/dev/null; then
 fi
 
 if test "$command" = "start"; then
-    children=""
+    childlist="`mktemp`"
 
     function kill_children() {
+        children="`cat $childlist`"
         echo "Stopping start processes: $children"
         trap - SIGINT
         kill -9 $children &>/dev/null || true
@@ -144,11 +145,14 @@ if test "$command" = "start"; then
     for dir in `list_packages`; do
         cd "packages/$dir"
         run_script prestart
-        run_script start true & children="$! $children"
+        run_script start true & echo "$!" >> "$childlist"
         cd ../..
     done
 
-    wait
+    while kill -0 `cat $childlist` &>/dev/null; do
+        :
+    done
+    rm -f $childlist
 elif test "$command" = "install" || test "$command" = "i" || test "$command" = "ci" || test "$command" = "test" || test "$command" = "run"; then
     args=""
     if test "$command" = "run" || test "$command" = "test"; then
