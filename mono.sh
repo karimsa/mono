@@ -144,10 +144,10 @@ function create_pkg_links() {
 command="$1"
 
 if test -z "$command"; then
-    if test -z "$CI"; then
-        command="install"
-    else
+    if test "$CI" = "true"; then
         command="ci"
+    else
+        command="install"
     fi
 else
     shift
