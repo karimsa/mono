@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "preinstall": "touch preinstall-ran",
+    "postinstall": "touch postinstall-ran",
+    "test": "node ."
+  },
+  "dependencies": {
+    "lodash": "*"
+  },
+  "devDependencies": {
+    "underscore": "*"
+  },
+  "name": "b"
+}
