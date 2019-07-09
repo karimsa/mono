@@ -18,6 +18,9 @@ if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
 fi
 echo "Running @karimsa/mono v`jq -r .version "${pkgJsonLocation}"`"
 
+# patch for ensuring that local binaries are always available
+export PATH="$PATH:./node_modules/.bin"
+
 function run_script() {
     script="$1"
     enable_echo="$2"
