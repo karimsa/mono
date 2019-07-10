@@ -12,11 +12,16 @@ if ! test -e "packages"; then
     exit 1
 fi
 
+jq="`cd $(dirname $0) && pwd`/jq/linux64/jq"
+if uname -a | grep Darwin &>/dev/null; then
+    jq="`cd $(dirname $0) && pwd`/jq/macos/jq"
+fi
+
 pkgJsonLocation="`cd $(dirname $0) && pwd`/package.json"
 if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
     pkgJsonLocation="`find $(dirname $pkgJsonLocation)/.. -name 'package.json'`"
 fi
-echo "Running @karimsa/mono v`jq -r .version "${pkgJsonLocation}"`"
+echo "Running @karimsa/mono v`$jq -r .version "${pkgJsonLocation}"`"
 
 # patch for ensuring that local binaries are always available
 export PATH="$PATH:./node_modules/.bin"
@@ -36,8 +41,8 @@ function run_script() {
     fi
 
     if test -e "package.json"; then
-        name="`cat package.json | jq -r .name`"
-        cmd="`cat package.json | jq -r .scripts.$script`"
+        name="`cat package.json | $jq -r .name`"
+        cmd="`cat package.json | $jq -r .scripts.$script`"
     else
         return 0
     fi
@@ -50,7 +55,7 @@ function run_script() {
         # Patch package.json because `npm ci` craps out
         # if you don't
         if test "$name" = "null"; then
-            jq '.name = ""' package.json > package.new.json
+            $jq '.name = ""' package.json > package.new.json
             mv package.new.json package.json
         fi
     fi
@@ -103,10 +108,10 @@ function disable_color() {
 }
 
 function list_packages() {
-    if ! test -e "package.json" || test "`jq -r .mono.packages package.json`" = "null"; then
+    if ! test -e "package.json" || test "`$jq -r .mono.packages package.json`" = "null"; then
         ls -1F packages | grep '/' | cut -d\/ -f1
     else
-        jq -r '.mono.packages[]' package.json
+        $jq -r '.mono.packages[]' package.json
     fi
 }
 
@@ -117,7 +122,7 @@ function create_pkg_links() {
             continue
         fi
 
-        outerPkgName="`jq -r .name packages/$outerPkg/package.json`"
+        outerPkgName="`$jq -r .name packages/$outerPkg/package.json`"
         if test "$outerPkgName" = "null"; then
             echo "Skipping linking '$outerPkg' - no name in package.json"
             continue
@@ -154,11 +159,6 @@ if test -z "$command"; then
     fi
 else
     shift
-fi
-
-jq="$PWD/jq/linux64"
-if uname -a | grep Darwin &>/dev/null; then
-    jq="$PWD/jq/macos"
 fi
 
 if test "$command" = "start"; then
