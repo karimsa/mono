@@ -12,16 +12,17 @@ if ! test -e "packages"; then
     exit 1
 fi
 
-jq="`cd $(dirname $0) && pwd`/jq/linux64/jq"
-if uname -a | grep Darwin &>/dev/null; then
-    jq="`cd $(dirname $0) && pwd`/jq/macos/jq"
+monoLocation="`cd $(dirname $0) && pwd`"
+if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
+    monoLocation="$(dirname `find $(dirname $pkgJsonLocation)/.. -name 'package.json'`)"
 fi
 
-pkgJsonLocation="`cd $(dirname $0) && pwd`/package.json"
-if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
-    pkgJsonLocation="`find $(dirname $pkgJsonLocation)/.. -name 'package.json'`"
+jq="$monoLocation/jq/linux64/jq"
+if uname -a | grep Darwin &>/dev/null; then
+    jq="$monoLocation/jq/macos/jq"
 fi
-echo "Running @karimsa/mono v`$jq -r .version "${pkgJsonLocation}"`"
+
+echo "Running @karimsa/mono v`$jq -r .version "${monoLocation}/package.json"`"
 
 # patch for ensuring that local binaries are always available
 export PATH="$PATH:./node_modules/.bin"
