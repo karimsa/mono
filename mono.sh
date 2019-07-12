@@ -25,7 +25,7 @@ fi
 echo "Running @karimsa/mono v`$jq -r .version "${monoLocation}/package.json"`"
 
 # patch for ensuring that local binaries are always available
-export PATH="$PATH:./node_modules/.bin"
+export PATH="$PATH:$PWD/node_modules/.bin:./node_modules/.bin"
 
 function run_script() {
     script="$1"
