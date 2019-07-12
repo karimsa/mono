@@ -12,9 +12,17 @@ if ! test -e "packages"; then
     exit 1
 fi
 
-monoLocation="`cd $(dirname $0) && pwd`"
-if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
-    monoLocation="$(dirname `find $(dirname $pkgJsonLocation)/.. -name 'package.json'`)"
+# monoLocation="`cd $(dirname $0) && pwd`"
+# if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
+#     monoLocation="$(dirname `find $(dirname $pkgJsonLocation)/.. -name 'package.json'`)"
+# elif echo "${monoLocation}" | grep "node_modules/.bin/" &>/dev/null; then
+#     # ...
+# fi
+
+monoLocation="${MONO_DIRNAME}"
+if test -z "$monoLocation"; then
+    echo "Cannot run mono without bootstrapper"
+    exit 1
 fi
 
 jq="$monoLocation/jq/linux64/jq"

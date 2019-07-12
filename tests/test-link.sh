@@ -13,5 +13,5 @@ not_exists "$wd/packages/a/node_modules"
 not_exists "$wd/packages/b/node_modules"
 not_exists "$wd/packages/b/node_modules"
 
-"$wd/../../mono.sh" link
-"$wd/../../mono.sh" test
+"$wd/../../bootstrap.js" link
+"$wd/../../bootstrap.js" test

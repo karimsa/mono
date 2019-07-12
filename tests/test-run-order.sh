@@ -10,7 +10,7 @@ rm -rf \
 
 not_exists "$wd/run-order"
 
-"$wd/../../mono.sh" run build
+"$wd/../../bootstrap.js" run build
 
 exists "$wd/run-order"
 

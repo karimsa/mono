@@ -26,7 +26,7 @@ not_exists "$wd/packages/baseball/pretest-ran"
 not_exists "$wd/packages/baseball/test-ran"
 not_exists "$wd/packages/baseball/posttest-ran"
 
-"$wd/../../mono.sh" "test"
+"$wd/../../bootstrap.js" "test"
 
 exists "$wd/pretest-ran"
 not_exists "$wd/test-ran" "Should still not exist, since there is no point of running 'npm test' in the root"

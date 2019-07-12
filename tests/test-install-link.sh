@@ -26,7 +26,7 @@ not_exists "$wd/packages/b/node_modules"
 not_exists "$wd/packages/b/preinstall-ran"
 not_exists "$wd/packages/b/postinstall-ran"
 
-CI=false "$wd/../../mono.sh"
+CI=false "$wd/../../bootstrap.js"
 
 exists "$wd/node_modules"
 exists "$wd/preinstall-ran"
@@ -38,4 +38,4 @@ exists "$wd/packages/b/node_modules"
 exists "$wd/packages/b/preinstall-ran"
 exists "$wd/packages/b/postinstall-ran"
 
-"$wd/../../mono.sh" test
+"$wd/../../bootstrap.js" test

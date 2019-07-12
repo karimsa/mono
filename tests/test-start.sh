@@ -14,7 +14,7 @@ function printlog() {
     echo
 }
 
-if ! "$wd/../../mono.sh" "start" &> "$log"; then
+if ! "$wd/../../bootstrap.js" "start" &> "$log"; then
     printlog
     print_err "Failed to run: mono start"
 fi

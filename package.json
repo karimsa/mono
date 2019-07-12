@@ -9,7 +9,7 @@
 		"watch:test": "nodemon -e sh -x npm run test"
 	},
 	"bin": {
-		"mono": "./mono.sh"
+		"mono": "./bootstrap.js"
 	},
 	"devDependencies": {
 		"nodemon": "^1.19.1"
