@@ -238,7 +238,7 @@ elif test "$command" = "install" || test "$command" = "i" || test "$command" = "
 
     run_script "post$command"
 
-    if test "$command" = "install"; then
+    if test "$command" = "install" || test "$command" = "ci"; then
         create_pkg_links
     fi
 elif test "$command" = "link"; then
