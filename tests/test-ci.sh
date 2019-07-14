@@ -26,8 +26,8 @@ not_exists "$wd/packages/baseball/node_modules"
 not_exists "$wd/packages/baseball/preinstall-ran"
 not_exists "$wd/packages/baseball/postinstall-ran"
 
-CI=true "$wd/../../bootstrap.js"
-CI=true "$wd/../../bootstrap.js" test
+CI=true "$wd/../../mono.sh"
+CI=true "$wd/../../mono.sh" test
 
 exists "$wd/node_modules"
 exists "$wd/preinstall-ran"

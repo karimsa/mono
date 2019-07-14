@@ -12,16 +12,16 @@ if ! test -e "packages"; then
     exit 1
 fi
 
-# monoLocation="`cd $(dirname $0) && pwd`"
-# if echo `dirname $0` | grep '/_npx/' &>/dev/null; then
-#     monoLocation="$(dirname `find $(dirname $pkgJsonLocation)/.. -name 'package.json'`)"
-# elif echo "${monoLocation}" | grep "node_modules/.bin/" &>/dev/null; then
-#     # ...
-# fi
-
 monoLocation="${MONO_DIRNAME}"
+
+if test -z `readlink $0`; then
+    monoLocation="`dirname $0`"
+else
+    monoLocation="`dirname $(readlink $0)`"
+fi
+
 if test -z "$monoLocation"; then
-    echo "Cannot run mono without bootstrapper"
+    echo "Failed to determine location of mono"
     exit 1
 fi
 
