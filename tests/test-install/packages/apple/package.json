@@ -1,10 +1,12 @@
 {
   "scripts": {
     "preinstall": "touch preinstall-ran",
-    "postinstall": "touch postinstall-ran"
+    "postinstall": "touch postinstall-ran",
+    "test": "node -r bcrypt -e 'process.exit()'"
   },
   "dependencies": {
-    "lodash": "*"
+    "lodash": "*",
+    "bcrypt": "*"
   },
   "devDependencies": {
     "underscore": "*"
