@@ -15,7 +15,7 @@ not_exists "node_modules"
 # simulate an `npm install`
 mkdir -p node_modules/{.bin,mono}
 cp -R $wd/../../{jq,*.sh,package*.json} "node_modules/mono/"
-ln -s "$PWD/node_modules/mono/`jq -r .bin.mono "$wd/../../package.json"`" "node_modules/.bin/mono"
+ln -s "../mono/`jq -r .bin.mono "$wd/../../package.json"`" "node_modules/.bin/mono"
 chmod +x "node_modules/.bin/mono"
 
 ls -lha node_modules/.bin

@@ -17,7 +17,14 @@ monoLocation="${MONO_DIRNAME}"
 if test -z `readlink $0`; then
     monoLocation="`dirname $0`"
 else
-    monoLocation="`dirname $(readlink $0)`"
+    prevPWD="$PWD"
+    linkLoc="`readlink $0`"
+
+    cd "`dirname $0`"
+    cd "`dirname ${linkLoc}`"
+
+    monoLocation="$PWD"
+    cd $prevPWD
 fi
 
 if test -z "$monoLocation"; then
