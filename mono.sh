@@ -57,9 +57,9 @@ function run_script() {
     fi
 
     if test "$script" = "install"; then
-        cmd="npm install --ignore-scripts --no-audit"
+        cmd="npm install --no-audit"
     elif test "$script" = "ci"; then
-        cmd="npm ci --ignore-scripts"
+        cmd="npm ci"
 
         # Patch package.json because `npm ci` craps out
         # if you don't
@@ -194,7 +194,18 @@ if test "$command" = "start"; then
         :
     done
     rm -f $childlist
-elif test "$command" = "install" || test "$command" = "i" || test "$command" = "ci" || test "$command" = "test" || test "$command" = "run"; then
+elif test "$command" = "install" || test "$command" = "ci"; then
+    run_script "$command"
+
+    for dir in `list_packages`; do
+        cd "packages/$dir"
+        run_script "$command"
+
+        cd ../..
+    done
+
+    create_pkg_links
+elif test "$command" = "test" || test "$command" = "run"; then
     args=""
     if test "$command" = "run" || test "$command" = "test"; then
         if test "$command" = "run" && test "$#" = "0"; then
@@ -237,10 +248,6 @@ elif test "$command" = "install" || test "$command" = "i" || test "$command" = "
     done
 
     run_script "post$command"
-
-    if test "$command" = "install" || test "$command" = "ci"; then
-        create_pkg_links
-    fi
 elif test "$command" = "link"; then
     create_pkg_links
 else
