@@ -45,6 +45,7 @@ export PATH="$PATH:$PWD/node_modules/.bin:./node_modules/.bin"
 function run_script() {
     script="$1"
     enable_echo="$2"
+    color_offset="$3"
 
     name=""
     cmd=""
@@ -105,7 +106,7 @@ function run_script() {
             istty="true"
         fi
 
-        bash -c "$cmd" 2>&1 | sed "s:^:`enable_fg_color 4 $istty`[$name]`disable_color $istty` :"
+        bash -c "$cmd" 2>&1 | sed "s:^:`enable_fg_color $[1+$color_offset] $istty`[$name]`disable_color $istty` :"
     else
         bash -c "$cmd"
     fi
@@ -190,11 +191,13 @@ if test "$command" = "start"; then
 
     run_script prestart
 
+    numPackages=0
     for dir in `list_packages`; do
         cd "packages/$dir"
         run_script prestart
-        run_script start true & echo "$!" >> "$childlist"
+        run_script start true "$numPackages" & echo "$!" >> "$childlist"
         cd ../..
+        numPackages="$[1+$numPackages]"
     done
 
     while kill -0 `cat $childlist` &>/dev/null; do
@@ -246,7 +249,7 @@ elif test "$command" = "test" || test "$command" = "run"; then
 
     for dir in `list_packages`; do
         cd "packages/$dir"
-        
+
         run_script "pre$command"
         run_script "$command"
         run_script "post$command"
