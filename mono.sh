@@ -242,10 +242,7 @@ elif test "$command" = "test" || test "$command" = "run"; then
     fi
 
     run_script "pre$command"
-
-    if test "$command" != "test"; then
-        run_script "$command"
-    fi
+    run_script "$command"
 
     for dir in `list_packages`; do
         cd "packages/$dir"
