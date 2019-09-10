@@ -29,7 +29,7 @@ not_exists "$wd/packages/baseball/posttest-ran"
 "$wd/../../mono.sh" "test"
 
 exists "$wd/pretest-ran"
-not_exists "$wd/test-ran" "Should still not exist, since there is no point of running 'npm test' in the root"
+exists "$wd/test-ran"
 exists "$wd/posttest-ran"
 exists "$wd/packages/apple/pretest-ran"
 exists "$wd/packages/apple/test-ran"
