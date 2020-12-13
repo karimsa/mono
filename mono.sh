@@ -59,7 +59,7 @@ function run_script() {
 
     if test -e "package.json"; then
         name="`cat package.json | $jq -r .name`"
-        cmd="`cat package.json | $jq -r ".scripts['$script']"`"
+        cmd="`cat package.json | $jq -r ".scripts[\"$script\"]"`"
     else
         return 0
     fi
